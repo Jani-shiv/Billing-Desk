@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKA CONNECT - Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>WIKA CONNECT</h1>
+            <div class="user-info">
+                <span>Welcome back!</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+        
+        <main class="dashboard-main">
+            <div class="dashboard-content">
+                <h2>What would you like to do?</h2>
+                
+                <div class="action-buttons">
+                    <button class="action-btn new-ticket" onclick="goToNewTicket()">
+                        <div class="btn-icon">🎫</div>
+                        <span>New Ticket</span>
+                        <div class="btn-glow"></div>
+                        <div class="ripple"></div>
+                    </button>
+                    
+                    <button class="action-btn track-ticket" onclick="goToTrack()">
+                        <div class="btn-icon">🔍</div>
+                        <span>Track Your Ticket</span>
+                        <div class="btn-glow"></div>
+                        <div class="ripple"></div>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

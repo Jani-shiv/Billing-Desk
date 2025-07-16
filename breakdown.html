@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKA CONNECT - Breakdown Ticket</title>
+    <link rel="stylesheet" href="css/breakdown.css">
+</head>
+<body>
+    <div class="breakdown-container">
+        <header class="page-header">
+            <button class="back-btn" onclick="goBack()">← Back</button>
+            <h1>WIKA CONNECT</h1>
+            <div></div>
+        </header>
+        
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Breakdown Ticket</h2>
+                    <p>Select the affected department</p>
+                </div>
+                
+                <form class="breakdown-form" id="breakdownForm">
+                    <div class="select-group">
+                        <select id="department" required>
+                            <option value="">Select Department</option>
+                            <option value="cnc-shop">CNC Shop</option>
+                            <option value="assembly-main">Assembly Shop - MainBuilding</option>
+                            <option value="fmm">FMM</option>
+                            <option value="etm">ETM</option>
+                            <option value="skid">Skid</option>
+                            <option value="gayesco">Gayesco</option>
+                            <option value="sf6">SF6</option>
+                            <option value="level">Level</option>
+                            <option value="gdmrc">GDMRC</option>
+                        </select>
+                        <label for="department">Department</label>
+                    </div>
+                    
+                    <div class="textarea-group">
+                        <textarea id="description" placeholder=" " required></textarea>
+                        <label for="description">Describe the breakdown</label>
+                    </div>
+                    
+                    <div class="priority-group">
+                        <label>Priority Level</label>
+                        <div class="priority-buttons">
+                            <input type="radio" id="low" name="priority" value="low">
+                            <label for="low" class="priority-btn">Low</label>
+                            
+                            <input type="radio" id="medium" name="priority" value="medium" checked>
+                            <label for="medium" class="priority-btn">Medium</label>
+                            
+                            <input type="radio" id="high" name="priority" value="high">
+                            <label for="high" class="priority-btn">High</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="goBack()">Back</button>
+                        <button type="submit" class="btn-primary">
+                            <span>Submit Ticket</span>
+                            <div class="ripple"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">✓</div>
+            <h3>Ticket Submitted Successfully!</h3>
+            <p>Your ticket ID is: <span id="ticketId"></span></p>
+            <button onclick="goToDashboard()">Back to Dashboard</button>
+        </div>
+    </div>
+    
+    <script src="js/breakdown.js"></script>
+</body>
+</html>
