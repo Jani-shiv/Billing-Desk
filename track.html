@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKA CONNECT - Track Ticket</title>
+    <link rel="stylesheet" href="css/track.css">
+</head>
+<body>
+    <div class="track-container">
+        <header class="page-header">
+            <button class="back-btn" onclick="goBack()">← Back</button>
+            <h1>WIKA CONNECT</h1>
+            <div></div>
+        </header>
+        
+        <main class="main-content">
+            <div class="track-content">
+                <div class="search-section">
+                    <h2>Track Your Ticket</h2>
+                    <p>Enter your phone number or ticket ID to track status</p>
+                    
+                    <form class="track-form" id="trackForm">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" placeholder=" " required>
+                            <label for="searchInput">Phone Number or Ticket ID</label>
+                            <span class="input-highlight"></span>
+                        </div>
+                        
+                        <button type="submit" class="track-btn">
+                            <span>Track Ticket</span>
+                            <div class="ripple"></div>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="results-section" id="resultsSection" style="display: none;">
+                    <h3>Ticket Status</h3>
+                    
+                    <div class="ticket-info">
+                        <div class="ticket-header">
+                            <span class="ticket-id">Ticket ID: <span id="displayTicketId"></span></span>
+                            <span class="ticket-type" id="displayTicketType"></span>
+                        </div>
+                        <div class="ticket-description" id="displayDescription"></div>
+                        <div class="ticket-date">Created: <span id="displayDate"></span></div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-step active" data-step="1">
+                                <div class="step-circle">
+                                    <span>1</span>
+                                </div>
+                                <div class="step-label">Received</div>
+                            </div>
+                            
+                            <div class="progress-step" data-step="2">
+                                <div class="step-circle">
+                                    <span>2</span>
+                                </div>
+                                <div class="step-label">Processing</div>
+                            </div>
+                            
+                            <div class="progress-step" data-step="3">
+                                <div class="step-circle">
+                                    <span>3</span>
+                                </div>
+                                <div class="step-label">Resolved</div>
+                            </div>
+                            
+                            <div class="progress-line">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="status-message" id="statusMessage">
+                            Your ticket has been received and is being reviewed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/track.js"></script>
+</body>
+</html>

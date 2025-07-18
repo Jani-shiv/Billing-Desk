@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKA CONNECT - Secure Login Portal</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="background-animation">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
+            </div>
+        </div>
+        
+        <div class="login-card">
+            <div class="card-header">
+                <div class="logo-container">
+                    <div class="logo-icon">🔐</div>
+                    <h1 class="logo-text">WIKA CONNECT</h1>
+                </div>
+                <p class="subtitle">Secure Ticket Management Portal</p>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="input-container">
+                    <div class="input-group">
+                        <input type="tel" id="phone" required>
+                        <label for="phone">Phone Number</label>
+                        <div class="input-highlight"></div>
+                        <div class="input-icon">📱</div>
+                    </div>
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+                
+                <div class="input-container">
+                    <div class="input-group">
+                        <input type="password" id="password" maxlength="20" required>
+                        <label for="password">Password</label>
+                        <div class="input-highlight"></div>
+                        <div class="input-icon">🔒</div>
+                        <div class="password-toggle" id="passwordToggle">👁️</div>
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">Sign In</span>
+                    <div class="btn-ripple"></div>
+                    <div class="btn-glow"></div>
+                </button>
+                
+                <div class="form-footer">
+                    <a href="#" class="forgot-link" id="forgotPassword">Forgot Password?</a>
+                    <a href="register.html" class="register-link">Create New Account</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Forgot Password Modal -->
+        <div class="modal-overlay" id="forgotModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Password Recovery</h3>
+                    <button class="modal-close" id="modalClose">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="tel" id="recoveryPhone" required>
+                        <label for="recoveryPhone">Enter Phone Number</label>
+                        <div class="input-highlight"></div>
+                    </div>
+                    <button class="recovery-btn" id="recoveryBtn">
+                        <span>Send Recovery Code</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Success Animation -->
+        <div class="success-animation" id="successAnimation">
+            <div class="success-icon">✓</div>
+            <p>Login Successful!</p>
+        </div>
+    </div>
+    
+    <script src="js/login.js"></script>
+</body>
+</html>

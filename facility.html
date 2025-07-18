@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKA CONNECT - Facility Ticket</title>
+    <link rel="stylesheet" href="css/facility.css">
+</head>
+<body>
+    <div class="facility-container">
+        <header class="page-header">
+            <button class="back-btn" onclick="goBack()">← Back</button>
+            <h1>WIKA CONNECT</h1>
+            <div></div>
+        </header>
+        
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Facility Ticket</h2>
+                    <p>Select relevant issues (max 2 per section)</p>
+                </div>
+                
+                <form class="facility-form" id="facilityForm">
+                    <div class="section">
+                        <h3>AC Related Queries</h3>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ac-cooling" name="ac" value="not-cooling">
+                                <label for="ac-cooling">Not cooling</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ac-leakage" name="ac" value="leakage">
+                                <label for="ac-leakage">AC Leakage</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ac-sound" name="ac" value="sound">
+                                <label for="ac-sound">Making sound</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ac-other" name="ac" value="other">
+                                <label for="ac-other">Other</label>
+                                <input type="text" id="ac-other-text" placeholder="Specify..." class="other-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Building Related Queries</h3>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="building-leakage" name="building" value="roof-leakage">
+                                <label for="building-leakage">Roof / Ceiling Leakage</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="building-furniture" name="building" value="furniture-damage">
+                                <label for="building-furniture">Furniture Damage</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="building-other" name="building" value="other">
+                                <label for="building-other">Other</label>
+                                <input type="text" id="building-other-text" placeholder="Specify..." class="other-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Facility Related Queries</h3>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="facility-washroom" name="facility" value="washroom-leakage">
+                                <label for="facility-washroom">Washroom Leakages</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="facility-plumbing" name="facility" value="plumbing-repairs">
+                                <label for="facility-plumbing">Plumbing Repairs</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="facility-other" name="facility" value="other">
+                                <label for="facility-other">Other</label>
+                                <input type="text" id="facility-other-text" placeholder="Specify..." class="other-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="textarea-group">
+                        <textarea id="additional-details" placeholder=" "></textarea>
+                        <label for="additional-details">Additional Details (Optional)</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="goBack()">Back</button>
+                        <button type="submit" class="btn-primary">
+                            <span>Submit Ticket</span>
+                            <div class="ripple"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">✓</div>
+            <h3>Ticket Submitted Successfully!</h3>
+            <p>Your ticket ID is: <span id="ticketId"></span></p>
+            <button onclick="goToDashboard()">Back to Dashboard</button>
+        </div>
+    </div>
+    
+    <script src="js/facility.js"></script>
+</body>
+</html>
