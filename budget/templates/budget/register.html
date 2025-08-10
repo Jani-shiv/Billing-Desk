@@ -1,0 +1,398 @@
+{% extends 'budget/base.html' %}
+
+{% block title %}Register - Billing Desk{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg animate__animated animate__fadeInUp">
+                <div class="card-body p-5">
+                    <!-- Logo/Brand -->
+                    <div class="text-center mb-4">
+                        <div class="bg-gradient-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-user-plus fa-2x text-white"></i>
+                        </div>
+                        <h2 class="fw-bold text-primary">Create Account</h2>
+                        <p class="text-muted">Join thousands of users managing their finances smarter</p>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form method="post" id="registerForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="first_name" 
+                                           name="first_name" 
+                                           placeholder="John"
+                                           required 
+                                           autofocus>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="last_name" 
+                                           name="last_name" 
+                                           placeholder="Doe"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-at"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       name="username" 
+                                       placeholder="johndoe"
+                                       required>
+                            </div>
+                            <div class="form-text">Username must be unique and contain only letters, numbers, and underscores.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email" 
+                                       placeholder="john@example.com"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password1" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="password1" 
+                                           name="password1" 
+                                           placeholder="Enter password"
+                                           required>
+                                    <button class="btn btn-outline-secondary" 
+                                            type="button" 
+                                            onclick="togglePassword('password1', 'toggleIcon1')">
+                                        <i class="fas fa-eye" id="toggleIcon1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="password2" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="password2" 
+                                           name="password2" 
+                                           placeholder="Confirm password"
+                                           required>
+                                    <button class="btn btn-outline-secondary" 
+                                            type="button" 
+                                            onclick="togglePassword('password2', 'toggleIcon2')">
+                                        <i class="fas fa-eye" id="toggleIcon2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Strength Indicator -->
+                        <div class="mb-3">
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar" id="passwordStrength" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="form-text" id="passwordStrengthText">Password strength: Very Weak</div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="terms" 
+                                       name="terms" 
+                                       required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> 
+                                    and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Subscription -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="newsletter" 
+                                       name="newsletter">
+                                <label class="form-check-label" for="newsletter">
+                                    Subscribe to our newsletter for financial tips and updates
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Create Account
+                        </button>
+
+                        <!-- Social Registration (Optional) -->
+                        <div class="text-center mb-3">
+                            <small class="text-muted">or sign up with</small>
+                        </div>
+
+                        <div class="row g-2 mb-4">
+                            <div class="col">
+                                <button type="button" class="btn btn-outline-danger w-100">
+                                    <i class="fab fa-google me-2"></i>Google
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-outline-primary w-100">
+                                    <i class="fab fa-facebook-f me-2"></i>Facebook
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            <p class="mb-0">
+                                Already have an account? 
+                                <a href="{% url 'login' %}" class="text-decoration-none fw-bold">Sign in here</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Features Preview -->
+            <div class="row mt-4 text-center">
+                <div class="col-3">
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Track Expenses</small>
+                </div>
+                <div class="col-3">
+                    <div class="text-success mb-2">
+                        <i class="fas fa-bullseye fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Set Goals</small>
+                </div>
+                <div class="col-3">
+                    <div class="text-info mb-2">
+                        <i class="fas fa-chart-pie fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Visual Reports</small>
+                </div>
+                <div class="col-3">
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-robot fa-2x"></i>
+                    </div>
+                    <small class="text-muted">AI Insights</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle password visibility
+    function togglePassword(fieldId, iconId) {
+        const passwordField = document.getElementById(fieldId);
+        const toggleIcon = document.getElementById(iconId);
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.className = 'fas fa-eye-slash';
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.className = 'fas fa-eye';
+        }
+    }
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        let text = 'Very Weak';
+        let color = 'bg-danger';
+        
+        // Length check
+        if (password.length >= 8) strength += 25;
+        
+        // Lowercase and uppercase check
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 25;
+        
+        // Number check
+        if (password.match(/[0-9]/)) strength += 25;
+        
+        // Special character check
+        if (password.match(/[^a-zA-Z0-9]/)) strength += 25;
+        
+        // Determine strength text and color
+        if (strength >= 75) {
+            text = 'Strong';
+            color = 'bg-success';
+        } else if (strength >= 50) {
+            text = 'Medium';
+            color = 'bg-warning';
+        } else if (strength >= 25) {
+            text = 'Weak';
+            color = 'bg-info';
+        }
+        
+        return { strength, text, color };
+    }
+
+    // Update password strength indicator
+    document.getElementById('password1').addEventListener('input', function() {
+        const password = this.value;
+        const { strength, text, color } = checkPasswordStrength(password);
+        
+        const progressBar = document.getElementById('passwordStrength');
+        const strengthText = document.getElementById('passwordStrengthText');
+        
+        progressBar.style.width = strength + '%';
+        progressBar.className = `progress-bar ${color}`;
+        strengthText.textContent = `Password strength: ${text}`;
+    });
+
+    // Form validation
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const password1 = document.getElementById('password1').value;
+        const password2 = document.getElementById('password2').value;
+        
+        if (password1 !== password2) {
+            e.preventDefault();
+            showNotification('Passwords do not match!', 'danger');
+            return;
+        }
+        
+        if (password1.length < 8) {
+            e.preventDefault();
+            showNotification('Password must be at least 8 characters long!', 'danger');
+            return;
+        }
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const stopLoading = showLoading(submitBtn);
+        
+        // Form will submit normally, but we show loading state
+        setTimeout(() => {
+            if (window.location.href === window.location.href) {
+                stopLoading();
+            }
+        }, 3000);
+    });
+
+    // Real-time password confirmation check
+    document.getElementById('password2').addEventListener('input', function() {
+        const password1 = document.getElementById('password1').value;
+        const password2 = this.value;
+        
+        if (password2 && password1 !== password2) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    // Username availability check (mock)
+    document.getElementById('username').addEventListener('blur', function() {
+        const username = this.value;
+        if (username.length >= 3) {
+            // In a real app, this would be an AJAX call to check availability
+            setTimeout(() => {
+                // Mock check - randomly show available/unavailable
+                const isAvailable = Math.random() > 0.3;
+                if (isAvailable) {
+                    this.classList.add('is-valid');
+                    this.classList.remove('is-invalid');
+                } else {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    showNotification('Username is already taken', 'warning');
+                }
+            }, 500);
+        }
+    });
+
+    // Add floating animation to the card
+    document.addEventListener('DOMContentLoaded', function() {
+        const card = document.querySelector('.card');
+        card.style.animation = 'float 3s ease-in-out infinite';
+    });
+
+    // Add custom CSS for enhanced styling
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .input-group-text {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        }
+        
+        .form-control.is-valid {
+            border-color: #198754;
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

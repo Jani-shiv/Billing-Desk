@@ -1,0 +1,542 @@
+{% extends 'budget/base.html' %}
+{% load static %}
+
+{% block title %}Reports - Billing Desk{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="page-title">
+                    <i class="fas fa-chart-bar me-2"></i>Financial Reports
+                </h1>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary" onclick="exportReport('pdf')">
+                        <i class="fas fa-file-pdf me-2"></i>Export PDF
+                    </button>
+                    <button class="btn btn-outline-success" onclick="exportReport('excel')">
+                        <i class="fas fa-file-excel me-2"></i>Export Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Range Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card glass-card">
+                <div class="card-body">
+                    <form id="reportFilterForm" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="reportDateFrom" class="form-label">From Date</label>
+                            <input type="date" class="form-control" id="reportDateFrom" name="date_from">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="reportDateTo" class="form-label">To Date</label>
+                            <input type="date" class="form-control" id="reportDateTo" name="date_to">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="reportPeriod" class="form-label">Quick Period</label>
+                            <select class="form-select" id="reportPeriod" name="period">
+                                <option value="">Custom Range</option>
+                                <option value="this_month">This Month</option>
+                                <option value="last_month">Last Month</option>
+                                <option value="this_quarter">This Quarter</option>
+                                <option value="this_year">This Year</option>
+                                <option value="last_year">Last Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter me-2"></i>Generate Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card glass-card stat-card income-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon income">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-subtitle mb-1">Total Income</h6>
+                            <h4 class="card-title mb-0" id="reportTotalIncome">${{ report_data.total_income|floatformat:2 }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card glass-card stat-card expense-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon expense">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-subtitle mb-1">Total Expenses</h6>
+                            <h4 class="card-title mb-0" id="reportTotalExpenses">${{ report_data.total_expenses|floatformat:2 }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card glass-card stat-card balance-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon balance">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-subtitle mb-1">Net Balance</h6>
+                            <h4 class="card-title mb-0" id="reportNetBalance">${{ report_data.net_balance|floatformat:2 }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card glass-card stat-card savings-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon savings">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-subtitle mb-1">Savings Rate</h6>
+                            <h4 class="card-title mb-0" id="reportSavingsRate">{{ report_data.savings_rate|floatformat:1 }}%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-pie-chart me-2"></i>Expense Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="expenseDistributionChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Income vs Expenses Trend
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="trendChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list me-2"></i>Category Breakdown
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Transactions</th>
+                                    <th>Average</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoryBreakdownTable">
+                                {% for category in report_data.category_breakdown %}
+                                <tr>
+                                    <td>{{ category.name }}</td>
+                                    <td>
+                                        <span class="badge {% if category.type == 'income' %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ category.type|title }}
+                                        </span>
+                                    </td>
+                                    <td class="{% if category.type == 'income' %}text-success{% else %}text-danger{% endif %}">
+                                        ${{ category.total|floatformat:2 }}
+                                    </td>
+                                    <td>{{ category.count }}</td>
+                                    <td>${{ category.average|floatformat:2 }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                                <div class="progress-bar" 
+                                                     style="width: {{ category.percentage }}%"
+                                                     role="progressbar"></div>
+                                            </div>
+                                            <span class="text-muted small">{{ category.percentage|floatformat:1 }}%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Comparison -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calendar me-2"></i>Monthly Comparison
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyComparisonChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stat-card {
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-icon.income {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.stat-icon.expense {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+}
+
+.stat-icon.balance {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+}
+
+.stat-icon.savings {
+    background: linear-gradient(135deg, #17a2b8, #6610f2);
+}
+
+.table th {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.table td {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.progress {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default date range to current month
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    document.getElementById('reportDateFrom').value = firstDay.toISOString().split('T')[0];
+    document.getElementById('reportDateTo').value = lastDay.toISOString().split('T')[0];
+    
+    // Initialize charts
+    initializeCharts();
+    
+    // Handle form submission
+    document.getElementById('reportFilterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateReport();
+    });
+    
+    // Handle period selection
+    document.getElementById('reportPeriod').addEventListener('change', function() {
+        setDateRange(this.value);
+    });
+});
+
+function setDateRange(period) {
+    const now = new Date();
+    let fromDate, toDate;
+    
+    switch(period) {
+        case 'this_month':
+            fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            break;
+        case 'last_month':
+            fromDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            toDate = new Date(now.getFullYear(), now.getMonth(), 0);
+            break;
+        case 'this_quarter':
+            const quarter = Math.floor(now.getMonth() / 3);
+            fromDate = new Date(now.getFullYear(), quarter * 3, 1);
+            toDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
+            break;
+        case 'this_year':
+            fromDate = new Date(now.getFullYear(), 0, 1);
+            toDate = new Date(now.getFullYear(), 11, 31);
+            break;
+        case 'last_year':
+            fromDate = new Date(now.getFullYear() - 1, 0, 1);
+            toDate = new Date(now.getFullYear() - 1, 11, 31);
+            break;
+        default:
+            return;
+    }
+    
+    document.getElementById('reportDateFrom').value = fromDate.toISOString().split('T')[0];
+    document.getElementById('reportDateTo').value = toDate.toISOString().split('T')[0];
+}
+
+function generateReport() {
+    const formData = new FormData(document.getElementById('reportFilterForm'));
+    const params = new URLSearchParams(formData);
+    
+    fetch(`/api/reports/?${params}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateReportData(data.report);
+            } else {
+                showAlert('Error generating report', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error generating report:', error);
+            showAlert('Error generating report', 'danger');
+        });
+}
+
+function initializeCharts() {
+    // Expense Distribution Chart
+    const expenseCtx = document.getElementById('expenseDistributionChart').getContext('2d');
+    window.expenseChart = new Chart(expenseCtx, {
+        type: 'doughnut',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                    '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { color: '#fff' }
+                }
+            }
+        }
+    });
+    
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    window.trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Income',
+                    data: [],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Expenses',
+                    data: [],
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#fff' }
+                }
+            },
+            scales: {
+                x: { ticks: { color: '#fff' } },
+                y: { ticks: { color: '#fff' } }
+            }
+        }
+    });
+    
+    // Monthly Comparison Chart
+    const monthlyCtx = document.getElementById('monthlyComparisonChart').getContext('2d');
+    window.monthlyChart = new Chart(monthlyCtx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Income',
+                    data: [],
+                    backgroundColor: '#28a745'
+                },
+                {
+                    label: 'Expenses',
+                    data: [],
+                    backgroundColor: '#dc3545'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#fff' }
+                }
+            },
+            scales: {
+                x: { ticks: { color: '#fff' } },
+                y: { ticks: { color: '#fff' } }
+            }
+        }
+    });
+}
+
+function updateReportData(reportData) {
+    // Update summary cards
+    document.getElementById('reportTotalIncome').textContent = `$${parseFloat(reportData.total_income).toFixed(2)}`;
+    document.getElementById('reportTotalExpenses').textContent = `$${parseFloat(reportData.total_expenses).toFixed(2)}`;
+    document.getElementById('reportNetBalance').textContent = `$${parseFloat(reportData.net_balance).toFixed(2)}`;
+    document.getElementById('reportSavingsRate').textContent = `${parseFloat(reportData.savings_rate).toFixed(1)}%`;
+    
+    // Update charts
+    updateCharts(reportData);
+}
+
+function updateCharts(reportData) {
+    // Update expense distribution chart
+    window.expenseChart.data.labels = reportData.expense_distribution.labels;
+    window.expenseChart.data.datasets[0].data = reportData.expense_distribution.data;
+    window.expenseChart.update();
+    
+    // Update trend chart
+    window.trendChart.data.labels = reportData.monthly_trend.months;
+    window.trendChart.data.datasets[0].data = reportData.monthly_trend.income;
+    window.trendChart.data.datasets[1].data = reportData.monthly_trend.expenses;
+    window.trendChart.update();
+    
+    // Update monthly comparison chart
+    window.monthlyChart.data.labels = reportData.monthly_comparison.months;
+    window.monthlyChart.data.datasets[0].data = reportData.monthly_comparison.income;
+    window.monthlyChart.data.datasets[1].data = reportData.monthly_comparison.expenses;
+    window.monthlyChart.update();
+}
+
+function exportReport(format) {
+    const formData = new FormData(document.getElementById('reportFilterForm'));
+    formData.append('format', format);
+    
+    fetch('/api/export-report/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        }
+        throw new Error('Export failed');
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `financial_report_${new Date().toISOString().split('T')[0]}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        showAlert(`Report exported successfully as ${format.toUpperCase()}`, 'success');
+    })
+    .catch(error => {
+        console.error('Export error:', error);
+        showAlert('Export functionality coming soon!', 'info');
+    });
+}
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    const container = document.querySelector('.container-fluid');
+    container.insertBefore(alertDiv, container.firstChild);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5000);
+}
+</script>
+{% endblock %}

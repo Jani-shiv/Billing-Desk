@@ -1,0 +1,102 @@
+{% extends 'budget/base.html' %}
+{% load static %}
+
+{% block title %}Register - Billing Desk{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-4">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            {{ form.username }}
+                            <label for="{{ form.username.id_for_label }}">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.email }}
+                            <label for="{{ form.email.id_for_label }}">Email Address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.first_name }}
+                            <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.last_name }}
+                            <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.password1 }}
+                            <label for="{{ form.password1.id_for_label }}">Password</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.password2 }}
+                            <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        Already have an account? 
+                        <a href="{% url 'login' %}">Sign in!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-floating > .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-color);
+}
+
+.form-floating > .form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(139, 69, 255, 0.3);
+}
+
+.form-floating > label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+</style>
+{% endblock %}

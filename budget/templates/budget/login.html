@@ -1,0 +1,204 @@
+{% extends 'budget/base.html' %}
+
+{% block title %}Login - Billing Desk{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg animate__animated animate__fadeInUp">
+                <div class="card-body p-5">
+                    <!-- Logo/Brand -->
+                    <div class="text-center mb-4">
+                        <div class="bg-gradient-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-chart-line fa-2x text-white"></i>
+                        </div>
+                        <h2 class="fw-bold text-primary">Welcome Back</h2>
+                        <p class="text-muted">Sign in to your account to continue</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form method="post" id="loginForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       name="username" 
+                                       placeholder="Enter your username"
+                                       required 
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Enter your password"
+                                       required>
+                                <button class="btn btn-outline-secondary" 
+                                        type="button" 
+                                        onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="remember" 
+                                           name="remember">
+                                    <label class="form-check-label" for="remember">
+                                        Remember me
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6 text-end">
+                                <a href="#" class="text-decoration-none">Forgot Password?</a>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Sign In
+                        </button>
+
+                        <!-- Social Login (Optional) -->
+                        <div class="text-center mb-3">
+                            <small class="text-muted">or continue with</small>
+                        </div>
+
+                        <div class="row g-2 mb-4">
+                            <div class="col">
+                                <button type="button" class="btn btn-outline-danger w-100">
+                                    <i class="fab fa-google me-2"></i>Google
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-outline-primary w-100">
+                                    <i class="fab fa-facebook-f me-2"></i>Facebook
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Register Link -->
+                        <div class="text-center">
+                            <p class="mb-0">
+                                Don't have an account? 
+                                <a href="{% url 'register' %}" class="text-decoration-none fw-bold">Sign up here</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Features Preview -->
+            <div class="row mt-4 text-center">
+                <div class="col-4">
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-chart-pie fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Smart Analytics</small>
+                </div>
+                <div class="col-4">
+                    <div class="text-success mb-2">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Secure & Safe</small>
+                </div>
+                <div class="col-4">
+                    <div class="text-info mb-2">
+                        <i class="fas fa-mobile-alt fa-2x"></i>
+                    </div>
+                    <small class="text-muted">Mobile Ready</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.className = 'fas fa-eye-slash';
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.className = 'fas fa-eye';
+        }
+    }
+
+    // Form validation and submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const stopLoading = showLoading(submitBtn);
+        
+        // Form will submit normally, but we show loading state
+        setTimeout(() => {
+            if (window.location.href === window.location.href) {
+                stopLoading();
+            }
+        }, 3000);
+    });
+
+    // Add floating animation to the card
+    document.addEventListener('DOMContentLoaded', function() {
+        const card = document.querySelector('.card');
+        card.style.animation = 'float 3s ease-in-out infinite';
+    });
+
+    // Add custom CSS for floating animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .input-group-text {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}
