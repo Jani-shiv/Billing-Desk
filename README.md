@@ -1,63 +1,41 @@
 
-#  финансовий контроль (Financial Control)  financiero  финансовий контроль
 
-![GitHub last commit](https://img.shields.io/github/last-commit/OPEN-FINANCE-VOYAGER/financiero?style=for-the-badge)
-![GitHub repo size](https://img.shields.io/github/repo-size/OPEN-FINANCE-VOYAGER/financiero?style=for-the-badge)
-![GitHub license](https://img.shields.io/github/license/OPEN-FINANCE-VOYAGER/financiero?style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/OPEN-FINANCE-VOYAGER/financiero?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/OPEN-FINANCE-VOYAGER/financiero?style=for-the-badge)
+# Belling-Desk
 
-## 🌟 Overview
+A modern, advanced budget tracker built with PHP, MySQL, Bootstrap 5, and JavaScript.
 
-Welcome to **financiero**! This is a comprehensive personal finance management application designed to help you track your income, expenses, and savings. Set financial goals, monitor your progress, and make informed decisions about your money.
+## Features
+- AI Auto-Expense Categorization
+- Visual Budget Progress Bars
+- Recurring Bills & Auto-Reminders (Email/SMS)
+- Expense Heatmap Calendar
+- Split Bills with Friends
+- Multi-Currency with Live Rates
+- Dark Mode / Light Mode Toggle
+- Export Data as PDF & Excel
+- Monthly Financial Health Score
+- Savings Suggestions AI
+- Responsive, animated UI
 
-![financiero Banner](https://media.giphy.com/media/3o6gDWzmAzrpi5DQU8/giphy.gif)
+## Setup
+1. Import the database schema from `Budget Tracker/config/database.sql` (database name: `Belling-Desk`).
+2. Configure database credentials in `Budget Tracker/config/database.php`.
+3. Place all project files in your XAMPP `htdocs` directory.
+4. Access the app via `http://localhost/Billing-Desk/Budget Tracker/`.
 
-## ✨ Features
+## Folder Structure
+- `Budget Tracker/` - Main app files
+- `assets/` - CSS, JS, images
+- `admin/` - Admin panel
+- `api/` - API endpoints
+- `config/` - Database config and schema
+- `sql/` - SQL migrations
 
-*   **Dashboard**: Get a quick overview of your financial health. 📊
-*   **Transactions**: Add, edit, and delete your income and expenses. 💸
-*   **Goals**: Set and track your financial goals. 🎯
-*   **Reports**: Visualize your spending habits with charts and graphs. 📈
-*   **User Authentication**: Securely manage your financial data. 🔒
-*   **Admin Panel**: Manage users and application settings. 🛠️
+## Author
+Jani-shiv
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-*   [XAMPP](https://www.apachefriends.org/index.html) or any other web server with PHP and MySQL.
-
-### Installation
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/OPEN-FINANCE-VOYAGER/financiero.git
-    ```
-2.  **Move the project to your web server's root directory** (e.g., `htdocs` for XAMPP).
-3.  **Import the database**:
-    *   Open `phpMyAdmin`.
-    *   Create a new database named `financiero`.
-    *   Import the `database.sql` file from the `config` directory.
-4.  **Configure the database connection**:
-    *   Open `config/database.php` and update the database credentials if necessary.
-5.  **Run the application**:
-    *   Open your web browser and navigate to `http://localhost/financiero`.
-
-## 📂 Project Structure
-
-```
-financiero/
-├── Cursor Web/
-│   ├── admin/
-│   │   ├── includes/
-│   │   │   ├── footer.php
-│   │   │   └── header.php
-│   │   ├── *.php (Admin panel files)
-│   ├── api/
-│   │   ├── *.php (API endpoints)
-│   ├── assets/
-│   │   ├── css/
+---
+For support or feature requests, open an issue or contact the author.
 │   │   │   ├── style.css
 │   │   │   └── tax-planning.css
 │   │   ├── images/
