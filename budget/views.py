@@ -323,15 +323,18 @@ def api_add_transaction(request):
         # Get category
         category = get_object_or_404(Category, id=category_id)
         
-        # Create transaction
+        # Create transaction - combine description and notes
+        full_description = f"{description}"
+        if notes:
+            full_description += f" - {notes}"
+        
         transaction = Transaction.objects.create(
             user=user,
-            description=description,
+            description=full_description,
             amount=float(amount),
             date=datetime.strptime(date, '%Y-%m-%d').date(),
             type=transaction_type,
             category=category,
-            notes=notes,
             currency='USD'
         )
         
@@ -358,16 +361,21 @@ def api_get_transaction(request, transaction_id):
             user=request.user
         )
         
+        # Split description and notes if they were combined
+        description_parts = transaction.description.split(' - ', 1)
+        description = description_parts[0]
+        notes = description_parts[1] if len(description_parts) > 1 else ''
+        
         return JsonResponse({
             'success': True,
             'transaction': {
                 'id': transaction.id,
-                'description': transaction.description,
+                'description': description,
                 'amount': str(transaction.amount),
                 'date': transaction.date.isoformat(),
                 'type': transaction.type,
                 'category_id': transaction.category.id,
-                'notes': getattr(transaction, 'notes', ''),
+                'notes': notes,
             }
         })
         
@@ -409,13 +417,16 @@ def api_update_transaction(request, transaction_id):
         # Get category
         category = get_object_or_404(Category, id=category_id)
         
-        # Update transaction
-        transaction.description = description
+        # Update transaction - combine description and notes
+        full_description = f"{description}"
+        if notes:
+            full_description += f" - {notes}"
+            
+        transaction.description = full_description
         transaction.amount = float(amount)
         transaction.date = datetime.strptime(date, '%Y-%m-%d').date()
         transaction.type = transaction_type
         transaction.category = category
-        transaction.notes = notes
         transaction.save()
         
         return JsonResponse({

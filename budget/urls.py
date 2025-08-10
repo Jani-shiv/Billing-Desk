@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
 from .favicon import favicon_view
+from .mobile_urls import mobile_urlpatterns
 
 urlpatterns = [
     # Authentication
@@ -58,4 +59,7 @@ urlpatterns = [
     path('api/toggle-notifications/', 
          views.toggle_notifications_api, 
          name='api_toggle_notifications'),
+    
+    # Mobile API endpoints
+    path('mobile/', include(mobile_urlpatterns)),
 ]
